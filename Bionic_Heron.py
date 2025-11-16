@@ -1,33 +1,48 @@
-def generate_subsets(nums, index=0, current=None):
-    if current is None:
-        current = []
+def generate_permutations(elements):
+    # Base case: if the list has only one element, return it as a single permutation
+    if len(elements) <= 1:
+        return [elements]
     
-    # Base case: if we've processed all elements
-    if index == len(nums):
-        return [current]
+    # List to store all permutations
+    result = []
     
-    # Recursive case:
-    # 1. Include the current element
-    include = generate_subsets(nums, index + 1, current + [nums[index]])
+    # Try each element as the first element
+    for i in range(len(elements)):
+        # Current element to place at the beginning
+        current = elements[i]
+        
+        # Remaining elements (excluding the current one)
+        remaining_elements = elements[:i] + elements[i+1:]
+        
+        # Generate permutations of the remaining elements
+        remaining_permutations = generate_permutations(remaining_elements)
+        
+        # Add current element to the beginning of each permutation of the remaining elements
+        for p in remaining_permutations:
+            result.append([current] + p)
     
-    # 2. Exclude the current element
-    exclude = generate_subsets(nums, index + 1, current)
-    
-    # Combine results
-    return include + exclude
+    return result
 
-# Example usage
-def print_example(nums):
-    result = generate_subsets(nums)
-    print(f"List: {nums}")
-    print(f"Subsets ({len(result)}):")
-    for subset in result:
-        print(f"  {subset}")
+# Function to display examples nicely
+def print_example(elements):
+    print(f"List: {elements}")
+    permutations = generate_permutations(elements)
+    print(f"Permutations ({len(permutations)}):")
+    for p in permutations:
+        print(f"  {p}")
     print()
 
-# 5 examples with different lists
+# Example 1: A list with 3 numbers
 print_example([1, 2, 3])
-print_example(['a', 'b'])
-print_example([10, 20, 30, 40])
+
+# Example 2: A list with characters
+print_example(['a', 'b', 'c'])
+
+# Example 3: A list with 2 elements
+print_example([10, 20])
+
+# Example 4: An empty list
 print_example([])
+
+# Example 5: A list with 1 element
 print_example([5])
